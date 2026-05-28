@@ -6,6 +6,9 @@ cmake_minimum_required(VERSION 3.9)
 # Keep the version below in sync with the one in db.h
 project(leveldb VERSION 1.23.0 LANGUAGES C CXX)
 
+# 展示编译链接命令
+set(CMAKE_VERBOSE_MAKEFILE ON)
+
 # C standard can be overridden when this is used as a sub-project.
 if(NOT CMAKE_C_STANDARD)
   # This project can use C11, but will gracefully decay down to C89.
@@ -13,14 +16,14 @@ if(NOT CMAKE_C_STANDARD)
   set(CMAKE_C_STANDARD_REQUIRED OFF)
   set(CMAKE_C_EXTENSIONS OFF)
 endif(NOT CMAKE_C_STANDARD)
-#
-## C++ standard can be overridden when this is used as a sub-project.
-#if(NOT CMAKE_CXX_STANDARD)
-#  # This project requires C++11.
-#  set(CMAKE_CXX_STANDARD 11)
-#  set(CMAKE_CXX_STANDARD_REQUIRED ON)
-#  set(CMAKE_CXX_EXTENSIONS OFF)
-#endif(NOT CMAKE_CXX_STANDARD)
+
+# C++ standard can be overridden when this is used as a sub-project.
+if(NOT CMAKE_CXX_STANDARD)
+  # This project requires C++17.
+  set(CMAKE_CXX_STANDARD 17)
+  set(CMAKE_CXX_STANDARD_REQUIRED ON)
+  set(CMAKE_CXX_EXTENSIONS OFF)
+endif(NOT CMAKE_CXX_STANDARD)
 
 if (WIN32)
   set(LEVELDB_PLATFORM_NAME LEVELDB_PLATFORM_WINDOWS)
@@ -42,9 +45,7 @@ check_library_exists(crc32c crc32c_value "" HAVE_CRC32C)
 check_library_exists(snappy snappy_compress "" HAVE_SNAPPY)
 check_library_exists(zstd ZSTD_compress "" HAVE_ZSTD)
 check_library_exists(tcmalloc malloc "" HAVE_TCMALLOC)
-# 手动指定 zstd和snappy
-#set(HAVE_ZSTD "1")
-#set(HAVE_SNAPPY "1")
+
 include(CheckCXXSymbolExists)
 # Using check_cxx_symbol_exists() instead of check_c_symbol_exists() because
 # we're including the header from C++, and feature detection should use the same
